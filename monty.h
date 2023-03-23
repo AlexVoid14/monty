@@ -1,6 +1,5 @@
 #ifndef _MONTY_H_
 #define _MONTY_H_
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -8,6 +7,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
+#define UNUSED(x) (void)(x)
 
 /**
  * struct var_s - struct to contain the main variables of the Monty interpreter
@@ -22,8 +22,7 @@ typedef struct var_s
 
 #define STACK 0
 #define QUEUE 1
-
-/* global struct to hold flag for queue and stack length */
+/* global struct to work with queue an lentgh*/
 extern var_t var;
 
 /**
@@ -43,7 +42,7 @@ typedef struct stack_s
 } stack_t;
 
 /**
- * struct instruction_s - opcoode and its function
+ * struct instruction_s - opcode and its function
  * @opcode: the opcode
  * @f: function to handle the opcode
  *
@@ -56,28 +55,72 @@ typedef struct instruction_s
 	void (*f)(stack_t **stack, unsigned int line_number);
 } instruction_t;
 
-void get_op(char *op, stack_t **stack, unsigned int line_number);
-void m_push(stack_t **stack, unsigned int line_number);
-void m_push2(stack_t **stack, int n);
-void m_pall(stack_t **stack, unsigned int line_number);
-void m_pint(stack_t **stack, unsigned int line_number);
-void m_pop(stack_t **stack, unsigned int line_number);
-void m_swap(stack_t **stack, unsigned int line_number);
-void m_add(stack_t **stack, unsigned int line_number);
-void m_nop(stack_t **stack, unsigned int line_number);
-void m_sub(stack_t **stack, unsigned int line_number);
-void m_mul(stack_t **stack, unsigned int line_number);
-void m_div(stack_t **stack, unsigned int line_number);
-void m_mod(stack_t **stack, unsigned int line_number);
+/**
+ * struct check_valid_erros_e - structure that check valid errors
+ * @opcode: opcode error
+ * @f: function to handle the opcode
+ *
+ * Description: opcode error
+ * for stack, queues, LIFO, FIFO Holberton project
+ */
+typedef struct check_valid_erros_e
+{
+	char *opcode;
+	void (*f)(unsigned int line_number);
+} check_valid_erros_z;
+
+/* global struct to hold flag for queue and stack length */
+var_t var;
+
+
+/* prototypes needed*/
+
+/* related to compare and match */
+void check_if_op_match(char *op, stack_t **stack, unsigned int line_number);
+
+/* op functions*/
+void push(stack_t **stack, unsigned int line_number);
+void pall(stack_t **stack, unsigned int line_number);
+void pint(stack_t **stack, unsigned int line_number);
+void pop(stack_t **stack, unsigned int line_number);
+void swap(stack_t **stack, unsigned int line_number);
+void add(stack_t **stack, unsigned int line_number);
+void nop(stack_t **stack, unsigned int line_number);
+void sub(stack_t **stack, unsigned int line_number);
+void div_m(stack_t **stack, unsigned int line_number);
+void mul(stack_t **stack, unsigned int line_number);
+void mod(stack_t **stack, unsigned int line_number);
+void pchar(stack_t **stack, unsigned int line_number);
+void pstr(stack_t **stack, unsigned int line_number);
 void rotl(stack_t **stack, unsigned int line_number);
 void rotr(stack_t **stack, unsigned int line_number);
-void m_stack(stack_t **stack, unsigned int line_number);
-void m_queue(stack_t **stack, unsigned int line_number);
-void m_pchar(stack_t **stack, unsigned int line_number);
-void m_pstr(stack_t **stack, unsigned int line_number);
-void free_stack(int status, void *arg);
-void m_fs_close(int status, void *arg);
-void free_lineptr(int status, void *arg);
+void stack_m(stack_t **stack, unsigned int line_number);
+void queue(stack_t **stack, unsigned int line_number);
+
+/*functions to close processes on exit*/
+void free_File_line(int status, void *arg);
+void free_stack_list(int status, void *arg);
+void close_File(int status, void *arg);
+
+/* related to add nodes*/
 stack_t *add_node(stack_t **stack, const int n);
+
+/*error handlers, print cutomize messages*/
+void error_handler(char *op_or_error, unsigned int Linenumber);
+void error_handler_add(unsigned int number);
+void malloc_fails(unsigned int Linenumber);
+void error_isnot_int(unsigned int Linenumber);
+void error_empty_stack(unsigned int Linenumber);
+void error_pchar(unsigned int Linenumber);
+void isnot_assci(unsigned int Linenumber);
+void error_sub(unsigned int Linenumber);
+void error_pint(unsigned int Linenumber);
+void error_mod(unsigned int Linenumber);
+void error_div_by_0(unsigned int Linenumber);
+void wrong_arguments(unsigned int Linenumber);
+void error_fopen(char *argument);
+void error_swap(unsigned int Linenumber);
+void error_div(unsigned int Linenumber);
+void error_mul(unsigned int Linenumber);
 
 #endif /* _MONTY_H_ */
